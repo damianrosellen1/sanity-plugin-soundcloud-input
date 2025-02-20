@@ -298,7 +298,7 @@ const DataFetcher: React.FC<DataFetcherProps> = ({clientId, clientSecret, userId
     }
   }
 
-  // fetch-mode: handler for changes inside the selection
+  // fetch-mode: handler for changes inside der Auswahl
   const handleSelectChange = (index: number, event: React.FormEvent<HTMLSelectElement>) => {
     const target = event.target as HTMLSelectElement
     const value = target.value
@@ -404,9 +404,7 @@ const DataFetcher: React.FC<DataFetcherProps> = ({clientId, clientSecret, userId
                   <Button
                     text="Confirm Selection"
                     onClick={() => {
-                      const selectedIds = selectedTrackIds.filter(
-                        (id): id is number => id !== undefined,
-                      )
+                      const selectedIds = selectedTrackIds.filter((id): id is number => id !== undefined)
                       const selectedTracksData = tracks.filter((track) =>
                         selectedIds.includes(track.id),
                       )
@@ -477,7 +475,11 @@ const DataFetcher: React.FC<DataFetcherProps> = ({clientId, clientSecret, userId
                 <Stack space={2}>
                   <Select
                     onChange={(e) =>
-                      setSelectedUploadTrack(e.target.value ? Number(e.target.value) : undefined)
+                      setSelectedUploadTrack(
+                        (e.target as HTMLSelectElement).value
+                          ? Number((e.target as HTMLSelectElement).value)
+                          : undefined
+                      )
                     }
                     value={selectedUploadTrack ? selectedUploadTrack.toString() : ''}
                     style={{padding: '8px', fontSize: '14px'}}
@@ -514,7 +516,7 @@ const DataFetcher: React.FC<DataFetcherProps> = ({clientId, clientSecret, userId
                   />
                 </Stack>
               )}
-              <Stack space={2} horizontal>
+              <Inline space={2}>
                 <Button
                   text="Add from latest Uploads"
                   onClick={handleAddFromUploads}
@@ -527,7 +529,7 @@ const DataFetcher: React.FC<DataFetcherProps> = ({clientId, clientSecret, userId
                   disabled={isFetching}
                   tone="primary"
                 />
-              </Stack>
+              </Inline>
               <Button
                 text="Confirm Selection"
                 onClick={confirmMixedSelection}
