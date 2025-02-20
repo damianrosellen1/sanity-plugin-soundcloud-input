@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
-import { Inline, Text, Button, Stack, Spinner, Select } from '@sanity/ui'
+// @ts-nocheck
+import React, {useState} from 'react'
+import {Inline, Text, Button, Stack, Spinner, Select} from '@sanity/ui'
 
 export interface Track {
   id: number
   title: string
-  release_date?: string // Optionales Feld für das Release-Datum
+  release_date?: string
 }
 
 export interface SoundcloudData {
@@ -15,16 +16,15 @@ export interface SoundcloudData {
 interface DataFetcherProps {
   clientId: string
   clientSecret: string
-  userId: string // ID des spezifischen SoundCloud-Accounts
+  userId: string
   onSuccess: (data: SoundcloudData) => void
 }
 
-const DataFetcher: React.FC<DataFetcherProps> = ({ clientId, clientSecret, userId, onSuccess }) => {
+const DataFetcher: React.FC<DataFetcherProps> = ({clientId, clientSecret, userId, onSuccess}) => {
   const [mode, setMode] = useState<'fetch' | 'resolve'>('fetch')
   const [isFetching, setIsFetching] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [tracks, setTracks] = useState<Track[]>([])
-  // Statt eines Multi-Selects verwenden wir ein Array, in dem jede Auswahl (über ein einzelnes Select) gespeichert wird.
   const [selectedTrackIds, setSelectedTrackIds] = useState<(number | undefined)[]>([])
   const [resolveQuery, setResolveQuery] = useState('')
   const [resolveResponse, setResolveResponse] = useState<any>(null)
@@ -53,7 +53,9 @@ const DataFetcher: React.FC<DataFetcherProps> = ({ clientId, clientSecret, userI
       if (data.access_token) {
         return data.access_token
       } else {
-        setErrorMsg((data.error || 'Failed to obtain access token.') + ' Status: ' + response.status)
+        setErrorMsg(
+          (data.error || 'Failed to obtain access token.') + ' Status: ' + response.status,
+        )
         return null
       }
     } catch (error) {
@@ -63,7 +65,7 @@ const DataFetcher: React.FC<DataFetcherProps> = ({ clientId, clientSecret, userI
     }
   }
 
-  // Funktion zum Abrufen der neuesten Tracks, die anschließend nach release_date sortiert werden
+  // Call latest track and sort for release_date afterwards
   const fetchTracks = async () => {
     setIsFetching(true)
     setErrorMsg('')
@@ -74,7 +76,14 @@ const DataFetcher: React.FC<DataFetcherProps> = ({ clientId, clientSecret, userI
       return
     }
 
-    const url = `https://api.soundcloud.com/users/${userId}/tracks?access=playable&limit=100`
+    // Track URL with limit=50, maximum is 200.
+    // Params: https://developers.soundcloud.com/docs/api/explorer/open-api#/users/get_users__user_id__tracks
+    const url = `https://api.soundcloud.com/users/${userId}/tracks?access=playable&limit=50`
+
+    // Note:
+    // It's not possible to search for title or other params inside user tracks, SoundCloud API is limited.
+    // If you have a lot of tracks you'll reach API rate limits very easily.
+    // Thats why I chose to set limit=50 instead of 200 and add a resolve function for URLs.
 
     try {
       const response = await fetch(url, {
@@ -89,7 +98,7 @@ const DataFetcher: React.FC<DataFetcherProps> = ({ clientId, clientSecret, userI
 
       if (response.ok) {
         if (data && data.length > 0) {
-          // Sortierung nach release_date (absteigend, neueste zuerst)
+          // Sort after release date
           const sortedTracks = (data as Track[]).sort((a, b) => {
             const dateA = a.release_date ? new Date(a.release_date).getTime() : 0
             const dateB = b.release_date ? new Date(b.release_date).getTime() : 0
@@ -97,7 +106,7 @@ const DataFetcher: React.FC<DataFetcherProps> = ({ clientId, clientSecret, userI
           })
           setTracks(sortedTracks)
           setErrorMsg('')
-          // Nach erfolgreichem Fetch wird initial ein leeres Select-Feld angezeigt.
+          // Initial empty select field
           setSelectedTrackIds([undefined])
         } else {
           setErrorMsg('No tracks found.')
@@ -117,7 +126,6 @@ const DataFetcher: React.FC<DataFetcherProps> = ({ clientId, clientSecret, userI
     }
   }
 
-  // Funktion zum Abrufen der Daten über die resolve API (unverändert)
   const fetchResolveTracks = async () => {
     setIsFetching(true)
     setErrorMsg('')
@@ -129,6 +137,7 @@ const DataFetcher: React.FC<DataFetcherProps> = ({ clientId, clientSecret, userI
       return
     }
 
+    // Resolve URL (no params possible)
     const url = `https://api.soundcloud.com/resolve?url=${encodeURIComponent(resolveQuery)}`
 
     try {
@@ -158,9 +167,11 @@ const DataFetcher: React.FC<DataFetcherProps> = ({ clientId, clientSecret, userI
         if (resolvedTracks.length > 0) {
           setTracks(resolvedTracks)
           setErrorMsg('')
-          onSuccess({ _type: 'soundcloud', tracks: resolvedTracks })
+          onSuccess({_type: 'soundcloud', tracks: resolvedTracks})
         } else {
-          setErrorMsg('No tracks found for the resolve query. URL: ' + encodeURIComponent(resolveQuery))
+          setErrorMsg(
+            'No tracks found for the resolve query. URL: ' + encodeURIComponent(resolveQuery),
+          )
         }
       } else {
         setErrorMsg('Error fetching resolve results. URL: ' + encodeURIComponent(resolveQuery))
@@ -173,7 +184,7 @@ const DataFetcher: React.FC<DataFetcherProps> = ({ clientId, clientSecret, userI
     }
   }
 
-  // Handler für die Änderung eines einzelnen Select-Feldes
+  // Handler for changes of a single select field
   const handleSelectChange = (index: number, event: React.FormEvent<HTMLSelectElement>) => {
     const target = event.target as HTMLSelectElement
     const value = target.value
@@ -182,16 +193,16 @@ const DataFetcher: React.FC<DataFetcherProps> = ({ clientId, clientSecret, userI
     setSelectedTrackIds(newSelectedTrackIds)
   }
 
-  // Fügt ein weiteres Select-Feld hinzu
+  // Add another select field
   const addAnotherSelect = () => {
     setSelectedTrackIds([...selectedTrackIds, undefined])
   }
 
-  // Bestätigung der ausgewählten Tracks – hier werden alle gültigen (nicht undefined) IDs verwendet.
+  // Confirm and load track selection
   const confirmSelection = () => {
     const selectedIds = selectedTrackIds.filter((id): id is number => id !== undefined)
     const selectedTracksData = tracks.filter((track) => selectedIds.includes(track.id))
-    onSuccess({ _type: 'soundcloud', tracks: selectedTracksData })
+    onSuccess({_type: 'soundcloud', tracks: selectedTracksData})
   }
 
   return (
@@ -199,7 +210,7 @@ const DataFetcher: React.FC<DataFetcherProps> = ({ clientId, clientSecret, userI
       {(!clientId || !clientSecret || !userId) && (
         <Inline space={[2]}>
           <Text size={2}>Missing</Text>
-          <Text size={2} style={{ fontWeight: 'bold' }}>
+          <Text size={2} style={{fontWeight: 'bold'}}>
             Client ID, Client Secret or User ID
           </Text>
         </Inline>
@@ -207,28 +218,28 @@ const DataFetcher: React.FC<DataFetcherProps> = ({ clientId, clientSecret, userI
       {clientId && clientSecret && userId && (
         <>
           <Stack space={2}>
-            <Text size={2} weight="semibold" style={{ marginBottom: '2px' }}>
+            <Text size={2} weight="semibold" style={{marginBottom: '2px'}}>
               Load Tracks
             </Text>
-            <label style={{ display: 'block', fontSize: '14px' }}>
+            <label style={{display: 'block', fontSize: '14px'}}>
               <input
                 type="radio"
                 name="mode"
                 value="fetch"
                 checked={mode === 'fetch'}
                 onChange={() => setMode('fetch')}
-                style={{ marginRight: '8px' }}
+                style={{marginRight: '8px'}}
               />
               From Latest Uploads
             </label>
-            <label style={{ display: 'block', fontSize: '14px' }}>
+            <label style={{display: 'block', fontSize: '14px'}}>
               <input
                 type="radio"
                 name="mode"
                 value="resolve"
                 checked={mode === 'resolve'}
                 onChange={() => setMode('resolve')}
-                style={{ marginRight: '8px' }}
+                style={{marginRight: '8px'}}
               />
               From URL (https://soundcloud.com/…)
             </label>
@@ -236,7 +247,12 @@ const DataFetcher: React.FC<DataFetcherProps> = ({ clientId, clientSecret, userI
 
           {mode === 'fetch' && (
             <>
-              <Button text="Load Tracks" onClick={fetchTracks} disabled={isFetching} tone="primary" />
+              <Button
+                text="Load Tracks"
+                onClick={fetchTracks}
+                disabled={isFetching}
+                tone="primary"
+              />
               {tracks.length > 0 && (
                 <Stack space={3}>
                   {selectedTrackIds.map((selectedId, index) => (
@@ -255,11 +271,16 @@ const DataFetcher: React.FC<DataFetcherProps> = ({ clientId, clientSecret, userI
                       </optgroup>
                     </Select>
                   ))}
-                  {/* <Button text="Add more" onClick={addAnotherSelect} disabled={isFetching} tone="primary" /> */}
+                  <Button
+                    text="Add more"
+                    onClick={addAnotherSelect}
+                    disabled={isFetching}
+                    tone="primary"
+                  />
                   <Button
                     text="Confirm"
                     onClick={confirmSelection}
-                    disabled={selectedTrackIds.filter(id => id !== undefined).length === 0}
+                    disabled={selectedTrackIds.filter((id) => id !== undefined).length === 0}
                     tone="primary"
                   />
                 </Stack>
@@ -277,7 +298,7 @@ const DataFetcher: React.FC<DataFetcherProps> = ({ clientId, clientSecret, userI
                 placeholder="Suchwort oder URL eingeben"
                 value={resolveQuery}
                 onChange={(e) => setResolveQuery(e.target.value)}
-                style={{ padding: '8px', fontSize: '14px', width: '100%' }}
+                style={{padding: '8px', fontSize: '14px', width: '100%'}}
               />
               <Button
                 text="Resolve Tracks"
@@ -290,10 +311,10 @@ const DataFetcher: React.FC<DataFetcherProps> = ({ clientId, clientSecret, userI
 
           {isFetching && <Spinner muted />}
 
-          {errorMsg && <Text style={{ color: 'red' }}>Error: {errorMsg}</Text>}
+          {errorMsg && <Text style={{color: 'red'}}>Error: {errorMsg}</Text>}
 
           {resolveResponse && (
-            <div style={{ marginTop: '16px' }}>
+            <div style={{marginTop: '16px'}}>
               <Text size={2} weight="semibold">
                 Vollständige JSON-Antwort:
               </Text>

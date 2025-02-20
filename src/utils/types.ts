@@ -38,5 +38,5 @@ export interface SoundcloudData {
   tracks: Track[]
 }
 
-// Custom Input soll den Wert vom Typ SoundcloudData erwarten.
+// Custom Input expects a value of type SoundcloudData.
 export type SoundCloudFieldInput = ObjectInputProps<SoundcloudData, ObjectSchemaType>

@@ -23,7 +23,6 @@ const TrackItem = ({ track }: { track: any }) => {
 
   return (
     <Box padding={3} border style={{ borderRadius: '4px', marginBottom: '1rem' }}>
-      {/* Zuerst das Bild */}
       {track.artwork_url && (
         <Box marginBottom={3}>
           <img
@@ -34,7 +33,6 @@ const TrackItem = ({ track }: { track: any }) => {
         </Box>
       )}
 
-      {/* Dann der Titel */}
       <Stack space={2} marginBottom={3}>
         <Text size={1} weight="semibold">
           Title
@@ -42,14 +40,14 @@ const TrackItem = ({ track }: { track: any }) => {
         <TextInput readOnly value={track.title || ''} />
       </Stack>
 
-      {/* Button zum Ein-/Ausklappen */}
+      {/* Button for hiding details */}
       <Button
         text={showDetails ? 'Hide Details' : 'Show Details'}
         onClick={toggleDetails}
         tone="primary"
       />
 
-      {/* Einklappbare Details */}
+      {/* Details, unneccesary information got commented out */}
       {showDetails && (
         <Box marginTop={3}>
             <Stack space={1}>
@@ -171,5 +169,4 @@ export const SoundCloudInputField: React.FC<InputProps> = ({ config, onChange, v
   )
 }
 
-// Default Export hinzufügen:
 export default SoundCloudInputField;
