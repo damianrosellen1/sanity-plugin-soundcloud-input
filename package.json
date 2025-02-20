@@ -4,7 +4,9 @@
   "description": "A plugin for using SoundCloud data in Sanity.",
   "keywords": [
     "sanity",
-    "sanity-plugin"
+    "sanity-plugin",
+    "soundcloud",
+    "soundcloud-plugin"
   ],
   "homepage": "https://github.com/damianrosellen1/sanity-plugin-soundcloud-input#readme",
   "bugs": {
