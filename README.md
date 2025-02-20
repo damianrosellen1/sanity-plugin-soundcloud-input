@@ -1,11 +1,13 @@
 # sanity-plugin-soundcloud-input
 
-> This is a **Sanity Studio v3** plugin.
+> This is a **Sanity Studio v3** plugin for importing SoundCloud content to your sanity project.
 
 ## Features
 + Connect your SoundCloud Application with your sanity project
 + Select one or more tracks from the latest uploaded tracks
 + Load a track from URL
+
+![preview](https://cdn.sanity.io/images/gqfbb293/production/c4ea200bd090e4d7e483f9326f5e886cba3a7251-640x548.gif)
 
 
 ## Upcoming
