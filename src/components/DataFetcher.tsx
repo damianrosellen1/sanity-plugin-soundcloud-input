@@ -291,7 +291,7 @@ const DataFetcher: React.FC<DataFetcherProps> = ({clientId, clientSecret, userId
           {mode === 'resolve' && (
             <Stack space={3}>
               <Text size={2} weight="semibold">
-                Suche
+                Search
               </Text>
               <input
                 type="text"
