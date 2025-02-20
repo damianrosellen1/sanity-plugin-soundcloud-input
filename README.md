@@ -4,15 +4,9 @@
 
 ## Features
 + Connect your SoundCloud Application with your sanity project
-+ Select one or more tracks from the latest uploaded tracks
-+ Load a track from URL
-
-![preview](https://cdn.sanity.io/images/gqfbb293/production/c4ea200bd090e4d7e483f9326f5e886cba3a7251-640x548.gif)
-
-
-## Upcoming
-
-+ Load combined content, from URL and from uploads
++ Select one or more tracks from your latest uploads
++ Select one or more tracks from a soundcloud URL
++ Create a mixed collection from uploads and URLs
 
 
 ## Requirements
