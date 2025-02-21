@@ -3,11 +3,11 @@
 > This is a **Sanity Studio v3** plugin for importing SoundCloud content to your sanity project.
 
 ## Features
-+ Connect your SoundCloud Application with your sanity project
-+ Select one or more tracks from your latest uploads
-+ Select one or more tracks from a soundcloud URL
-+ Create a mixed collection from uploads and URLs
 
+- Connect your SoundCloud Application with your sanity project
+- Select one or more tracks from your latest uploads
+- Select one or more tracks from a soundcloud URL
+- Create a mixed collection from uploads and URLs
 
 ## Requirements
 
@@ -18,7 +18,6 @@ For using this plugin you need the following:
 3. The SoundCloud Application Credentials (Client ID, Client Secret and Website URI)
 4. Your SoundCloud UserID. It can be retreiced using the [SoundCloud Public API Specification Page](https://developers.soundcloud.com/docs/api/explorer/open-api). You have to authorize via your Application Credentials with **oAuth2_1 (OAuth2, clientCredentials)** to [get your user_id](https://developers.soundcloud.com/docs/api/explorer/open-api#/users/get_users__user_id_).
 
-
 ## Installation
 
 ```sh
@@ -26,15 +25,6 @@ npm install sanity-plugin-soundcloud-input
 ```
 
 ## Usage
-
-Create a .env file in your sanity directory and add the following
-
-```ts
-SANITY_STUDIO_SOUNDCLOUD_CLIENT_ID=YOUR_CLIENT_ID
-SANITY_STUDIO_SOUNDCLOUD_CLIENT_SECRET=YOUR_CLIENT_SECRET
-SANITY_STUDIO_SOUNDCLOUD_URI=YOUR_URI
-SANITY_STUDIO_SOUNDCLOUD_USER_ID=YOUR_USER_ID
-```
 
 Add it as a plugin in `sanity.config.ts` (or .js):
 
@@ -44,15 +34,23 @@ import {soundcloudInput} from 'sanity-plugin-soundcloud-input'
 
 export default defineConfig({
   //...
-  plugins: [
-    soundcloudInput({
-      clientId: process.env.SANITY_STUDIO_SOUNDCLOUD_CLIENT_ID,
-      clientSecret: process.env.SANITY_STUDIO_SOUNDCLOUD_CLIENT_SECRET,
-      userId: process.env.SANITY_STUDIO_SOUNDCLOUD_USER_ID,
-    }),
-  ],
+  plugins: [soundcloudInput({})],
 })
 ```
+
+Add it to your schemas:
+
+```
+{
+  name: 'soundcloud',
+  type: 'soundcloud',
+  title: 'SoundCloud Content',
+  group: 'soundcloud',
+},
+```
+
+Set up your API Credentials in the API Settings and you're ready to go.
+
 
 ## License
 

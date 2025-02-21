@@ -4,6 +4,7 @@ export interface Config {
   clientId: string
   clientSecret: string
   userId: string
+  websiteURI: string
 }
 
 export interface Track {

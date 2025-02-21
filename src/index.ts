@@ -9,12 +9,13 @@ const defaultConfig: Config = {
   clientId: '',
   clientSecret: '',
   userId: '',
+  websiteURI: '',
 };
 
 export const soundcloudInput = definePlugin<Config | void>((userConfig) => {
   const config = { ...defaultConfig, ...userConfig };
 
-  if (!config.clientId || !config.clientSecret || !config.userId) {
+  if (!config.clientId || !config.clientSecret || !config.userId || !config.websiteURI) {
     console.warn(
       'SoundCloud Plugin: Missing clientId, clientSecret or userId. Please pass them in the configuration.'
     );

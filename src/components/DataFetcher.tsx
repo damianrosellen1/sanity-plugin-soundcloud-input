@@ -1,5 +1,7 @@
 import React, {useState} from 'react'
-import {Inline, Text, Button, Select, Stack, Spinner} from '@sanity/ui'
+import {Card, Inline, Text, Button, Select, Stack, Spinner} from '@sanity/ui'
+import {CogIcon} from '@sanity/icons'
+import {useSecrets, SettingsView} from '@sanity/studio-secrets'
 
 export interface Track {
   id: number
@@ -16,10 +18,29 @@ interface DataFetcherProps {
   clientId: string
   clientSecret: string
   userId: string
+  websiteURI: string
   onSuccess: (data: SoundcloudData) => void
 }
 
-const DataFetcher: React.FC<DataFetcherProps> = ({clientId, clientSecret, userId, onSuccess}) => {
+const DataFetcher: React.FC<DataFetcherProps> = ({
+  clientId,
+  clientSecret,
+  userId,
+  websiteURI,
+  onSuccess,
+}) => {
+  // Namespace und Schlüssel für die Secrets
+  const namespace = 'soundcloud'
+  const pluginConfigKeys = [
+    {key: 'clientId', title: 'SoundCloud Client ID'},
+    {key: 'clientSecret', title: 'SoundCloud Client Secret'},
+    {key: 'userId', title: 'SoundCloud User ID'},
+    {key: 'websiteURI', title: 'Website URI'},
+  ]
+
+  // Toggle für die SettingsView
+  const [showSettings, setShowSettings] = useState(false)
+
   // available modes: fetch, resolve and mix
   const [mode, setMode] = useState<'fetch' | 'resolve' | 'mix'>('fetch')
   const [isFetching, setIsFetching] = useState(false)
@@ -47,6 +68,7 @@ const DataFetcher: React.FC<DataFetcherProps> = ({clientId, clientSecret, userId
       client_id: clientId,
       client_secret: clientSecret,
       userId: userId,
+      websiteURI: websiteURI,
       grant_type: 'client_credentials',
     })
 
@@ -318,18 +340,10 @@ const DataFetcher: React.FC<DataFetcherProps> = ({clientId, clientSecret, userId
 
   return (
     <Stack space={4}>
-      {(!clientId || !clientSecret || !userId) && (
-        <Inline space={[2]}>
-          <Text size={2}>Missing</Text>
-          <Text size={2} style={{fontWeight: 'bold'}}>
-            Client ID, Client Secret oder User ID
-          </Text>
-        </Inline>
-      )}
       {clientId && clientSecret && userId && (
         <>
           <Stack space={2}>
-            <Text size={2} weight="semibold" style={{marginBottom: '2px'}}>
+            <Text size={2} weight="semibold" style={{marginBottom: '6px'}}>
               Choose Track Source
             </Text>
             <label style={{display: 'block', fontSize: '14px'}}>
@@ -404,7 +418,9 @@ const DataFetcher: React.FC<DataFetcherProps> = ({clientId, clientSecret, userId
                   <Button
                     text="Confirm Selection"
                     onClick={() => {
-                      const selectedIds = selectedTrackIds.filter((id): id is number => id !== undefined)
+                      const selectedIds = selectedTrackIds.filter(
+                        (id): id is number => id !== undefined,
+                      )
                       const selectedTracksData = tracks.filter((track) =>
                         selectedIds.includes(track.id),
                       )
@@ -478,7 +494,7 @@ const DataFetcher: React.FC<DataFetcherProps> = ({clientId, clientSecret, userId
                       setSelectedUploadTrack(
                         (e.target as HTMLSelectElement).value
                           ? Number((e.target as HTMLSelectElement).value)
-                          : undefined
+                          : undefined,
                       )
                     }
                     value={selectedUploadTrack ? selectedUploadTrack.toString() : ''}
@@ -542,6 +558,37 @@ const DataFetcher: React.FC<DataFetcherProps> = ({clientId, clientSecret, userId
           {isFetching && <Spinner muted />}
           {errorMsg && <Text style={{color: 'red'}}>Error: {errorMsg}</Text>}
         </>
+      )}
+      {/* Button to toggle SettingsView */}
+      <Card padding={0} style={{textAlign: 'left'}}>
+        <Inline space={[3, 3, 4]}>
+          <Button
+            text="API Settings"
+            fontSize={[1, 1, 1]}
+            icon={CogIcon}
+            mode="ghost"
+            padding={[3, 3, 3]}
+            radius="full"
+            onClick={() => setShowSettings((prev) => !prev)}
+          />
+        </Inline>
+      </Card>
+      {showSettings && (
+        <SettingsView
+          title="Edit SoundCloud API Credentials"
+          namespace={namespace}
+          keys={pluginConfigKeys}
+          onClose={() => setShowSettings(false)}
+        />
+      )}
+
+      {(!clientId || !clientSecret || !userId) && (
+        <Inline space={[2]}>
+          <Text size={2}>Missing</Text>
+          <Text size={2} style={{fontWeight: 'bold'}}>
+            Client ID, Client Secret oder User ID
+          </Text>
+        </Inline>
       )}
     </Stack>
   )

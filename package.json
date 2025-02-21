@@ -49,6 +49,7 @@
     "@sanity/browserslist-config": "^1.0.3",
     "@sanity/icons": "^3.4.0",
     "@sanity/incompatible-plugin": "^1.0.4",
+    "@sanity/studio-secrets": "^3.0.1",
     "@sanity/ui": "^2.8.23",
     "browserslist": "extends @sanity/browserslist-config",
     "yalc": "1.0.0-pre.53"
