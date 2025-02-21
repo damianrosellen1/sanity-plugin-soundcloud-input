@@ -7,7 +7,7 @@ import {TrashIcon} from '@sanity/icons'
 import {unset, set} from 'sanity'
 import {useSecrets, SettingsView} from '@sanity/studio-secrets'
 
-// Namespace und Konfiguration für die Secrets
+// Namespace and configuration for API secrets
 const namespace = 'soundcloud'
 const pluginConfigKeys = [
   {key: 'clientId', title: 'SoundCloud Client ID'},
@@ -111,12 +111,12 @@ const TrackItem = ({track}: {track: any}) => {
 }
 
 export const SoundCloudInputField: React.FC<InputProps> = ({config, onChange, value}) => {
-  // Secrets über den Plugin-Hook abrufen
+  // Get secrets via plugin hook
   const {secrets} = useSecrets(namespace)
   const [showSettings, setShowSettings] = useState(false)
 
   useEffect(() => {
-    // Wenn keine Secrets vorhanden sind, soll der Einstellungsdialog angezeigt werden.
+    // Show dialogue if no secrets are available
     if (secrets) {
       setShowSettings(false)
     }
@@ -133,7 +133,7 @@ export const SoundCloudInputField: React.FC<InputProps> = ({config, onChange, va
     )
   }
 
-  // Falls Secrets vorhanden sind, werden diese genutzt – andernfalls die aus der config.
+  // Use secrets if available, otherwise use config
   const clientId = secrets?.clientId || config.clientId
   const clientSecret = secrets?.clientSecret || config.clientSecret
   const userId = secrets?.userId || config.userId
