@@ -95,7 +95,7 @@ export interface Track {
 
 You can use `stream_url` for the [SoundCloud Widget API](https://developers.soundcloud.com/docs/api/html5-widget).
 
-If you want to use the track artwork in your frontend, you have to replace the end of the image-link with your desired resolution:
+If you want to use the track artwork in your frontend, you have to replace the end of the image-link with your desired resolution, for example 200x200 pixels:
 
 ```html
   <img :src="`${track.artwork_url.replace('-large', '-t200x200')}`" alt="Artwork"/>
