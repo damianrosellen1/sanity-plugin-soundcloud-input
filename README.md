@@ -51,6 +51,50 @@ Add it to your schemas:
 
 Set up your API Credentials in the API Settings and you're ready to go.
 
+## Data
+
+The Plugin will provide an array:
+
+```ts
+export interface SoundcloudData {
+  _type: 'soundcloud'
+  tracks: Track[]
+}
+```
+
+of objects:
+
+```ts
+export interface Track {
+  id: number
+  created_at: string
+  duration: number
+  tag_list: string
+  streamable: boolean
+  purchase_url?: string
+  genre: string
+  title: string
+  description: string
+  release_year: number
+  release_month: number
+  release_day: number
+  license: string
+  uri: string
+  user: {
+    id: number
+    username: string
+    permalink_url: string
+  }
+  artwork_url?: string
+  waveform_url?: string
+  stream_url: string
+  playback_count: number
+  favoritings_count: number
+}
+```
+
+You can use `stream_url` for the [SoundCloud Widget API](https://developers.soundcloud.com/docs/api/html5-widget).
+
 
 ## License
 
