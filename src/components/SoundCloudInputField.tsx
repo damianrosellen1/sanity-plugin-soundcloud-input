@@ -56,52 +56,52 @@ const TrackItem = ({track}: {track: any}) => {
 
       {showDetails && (
         <Box marginTop={3}>
-          <Stack space={1}>
-            <Text size={1} weight="semibold">Track ID</Text>
+          <Stack space={1} marginBottom={3}>
+            <Text size={1} marginBottom={1} weight="semibold">Track ID</Text>
             <TextInput readOnly value={track.id?.toString() || ''} />
           </Stack>
-          <Stack space={1}>
-            <Text size={1} weight="semibold">Created At</Text>
+          <Stack space={1} marginBottom={3}>
+            <Text size={1} marginBottom={1} weight="semibold">Created At</Text>
             <TextInput readOnly value={track.created_at || ''} />
           </Stack>
-          <Stack space={1}>
-            <Text size={1} weight="semibold">Duration</Text>
+          <Stack space={1} marginBottom={3}>
+            <Text size={1} marginBottom={1} weight="semibold">Duration</Text>
             <TextInput readOnly value={track.duration?.toString() || ''} />
           </Stack>
-          <Stack space={1}>
-            <Text size={1} weight="semibold">Tag List</Text>
+          <Stack space={1} marginBottom={3}>
+            <Text size={1} marginBottom={1} weight="semibold">Tag List</Text>
             <TextInput readOnly value={track.tag_list || ''} />
           </Stack>
-          <Stack space={1}>
-            <Text size={1} weight="semibold">Streamable</Text>
+          <Stack space={1} marginBottom={3}>
+            <Text size={1} marginBottom={1} weight="semibold">Streamable</Text>
             <TextInput readOnly value={track.streamable?.toString() || ''} />
           </Stack>
-          <Stack space={1}>
-            <Text size={1} weight="semibold">Genre</Text>
+          <Stack space={1} marginBottom={3}>
+            <Text size={1} marginBottom={1} weight="semibold">Genre</Text>
             <TextInput readOnly value={track.genre || ''} />
           </Stack>
-          <Stack space={1}>
-            <Text size={1} weight="semibold">Description</Text>
+          <Stack space={1} marginBottom={3}>
+            <Text size={1} marginBottom={1} weight="semibold">Description</Text>
             <TextInput readOnly value={track.description || ''} />
           </Stack>
-          <Stack space={1}>
-            <Text size={1} weight="semibold">License</Text>
+          <Stack space={1} marginBottom={3}>
+            <Text size={1} marginBottom={1} weight="semibold">License</Text>
             <TextInput readOnly value={track.license || ''} />
           </Stack>
-          <Stack space={1}>
-            <Text size={1} weight="semibold">URI</Text>
+          <Stack space={1} marginBottom={3}>
+            <Text size={1} marginBottom={1} weight="semibold">URI</Text>
             <TextInput readOnly value={track.uri || ''} />
           </Stack>
-          <Stack space={1}>
-            <Text size={1} weight="semibold">Stream URL</Text>
+          <Stack space={1} marginBottom={3}>
+            <Text size={1} marginBottom={1} weight="semibold">Stream URL</Text>
             <TextInput readOnly value={track.stream_url || ''} />
           </Stack>
-          <Stack space={1}>
-            <Text size={1} weight="semibold">Playback Count</Text>
+          <Stack space={1} marginBottom={3}>
+            <Text size={1} marginBottom={1} weight="semibold">Playback Count</Text>
             <TextInput readOnly value={track.playback_count?.toString() || ''} />
           </Stack>
-          <Stack space={1}>
-            <Text size={1} weight="semibold">Favoritings Count</Text>
+          <Stack space={1} marginBottom={3}>
+            <Text size={1} marginBottom={1} weight="semibold">Favoritings Count</Text>
             <TextInput readOnly value={track.favoritings_count?.toString() || ''} />
           </Stack>
         </Box>
