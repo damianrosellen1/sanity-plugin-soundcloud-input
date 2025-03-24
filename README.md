@@ -21,7 +21,7 @@ For using this plugin you need the following:
 ## Installation
 
 ```sh
-npm install sanity-plugin-soundcloud-input
+npm install @damianrosellen/sanity-plugin-soundcloud-input
 ```
 
 ## Usage
